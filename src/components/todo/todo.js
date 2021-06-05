@@ -50,7 +50,7 @@ function ToDo(props) {
         <section className="todo">
 
           <div>
-            <TodoForm handleSubmit={addItem} />
+            <TodoForm todoHandleSubmit={addItem} />
           </div>
 
           <div>
