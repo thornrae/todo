@@ -7,7 +7,9 @@ function TodoList(props) {
 
       <ListGroup variant="flush">
         {props.list.map(item =>
-        <ListGroup.Item className={`complete-${item.complete.toString()}`} key={item._id} onClick={() => props.handleComplete(item._id)}>{item.text}</ListGroup.Item> 
+        <ListGroup.Item className={`complete-${item.complete.toString()}`} key={item._id} onClick={() => props.handleComplete(item._id)}>{item.text} 
+        <span onClick={() => props.handleDelete(item._id)}>Delete</span>
+        </ListGroup.Item> 
           )}
       </ListGroup>
 

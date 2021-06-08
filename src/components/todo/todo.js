@@ -9,7 +9,7 @@ import axios from 'axios';
 
 
 import './todo.scss';
-import { NavItem } from 'react-bootstrap';
+// import { NavItem } from 'react-bootstrap';
 
 function ToDo(props) {
 
@@ -42,8 +42,19 @@ function ToDo(props) {
       setList(newlist);
       refetch()
     }
-
   };
+
+  const deleteItem = async id => {
+    let item = list.filter(i => i._id === id)[0] || {};
+
+    if(item._id) {
+      let url =  `https://api-js401.herokuapp.com/api/v1/todo/${id}`;
+      let deletedItem = await axios.delete(url, item);
+      let updatedList = list.map(listItem => listItem.id === item._id ? item : listItem);
+      setList(updatedList);
+      refetch()
+    }
+  }
 
   useEffect( () => {
     if(!loading){
@@ -69,6 +80,7 @@ function ToDo(props) {
             <TodoList
               list={list}
               handleComplete={toggleComplete}
+              handleDelete={deleteItem}
             />
           </div>
         </section>
