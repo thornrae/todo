@@ -1,30 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
 // import useGetAll from '../../hooks/get.js';
 // import { useGetData } from 'use-axios-react';
 // import { useGetCallback } from 'use-axios-react';
 import useAxios from 'axios-hooks';
+import axios from 'axios';
 
 
 import './todo.scss';
 
 function ToDo(props) {
 
-
-  // const [results = []] = useGetData("https:api-js401.herokuapp.com/api/v1/todo");
-  // console.log(results);
-  // // // setList(data);
-
   const [list, setList] = useState([]);
 
-  // const [results = []] = useGetCallback("https:api-js401.herokuapp.com/api/v1/todo");
-  // console.log(results);
-  // useEffect ( () => {
-    
-  // })
-  const [{data: getData}] = useAxios ({url: "https:api-js401.herokuapp.com/api/v1/todo", method:"GET"});
-    console.log(getData);
+  const [{ data, loading, error }, refetch] = useAxios ({url: "https:api-js401.herokuapp.com/api/v1/todo", method:"GET"});
 
   const addItem = (item) => {
     console.log(item);
@@ -33,24 +23,28 @@ function ToDo(props) {
     setList([...list, item]);
   };
 
-  const toggleComplete = id => {
+  const toggleComplete = async id => {
 
     let item = list.filter(i => i._id === id)[0] || {};
 
     if (item._id) {
       item.complete = !item.complete;
+      let url =  `https://api-js401.herokuapp.com/api/v1/todo/${id}`;
+      let fixed = await axios.put(url, item) 
+      console.log(fixed);
+
       let newlist = list.map(listItem => listItem._id === item._id ? item : listItem);
       setList(newlist);
+      refetch()
     }
 
   };
 
-
-
-  // const useEffect = () => {
-  //   const [data] = useGetData("https:api-js401.herokuapp.com/api/v1/todo");
-  //   setList(data);
-  // }, []);
+  useEffect( () => {
+    if(!loading){
+      setList(data.results);
+    }
+  }, [loading, data]);
 
     return (
       <>
