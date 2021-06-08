@@ -3,7 +3,6 @@ import React from 'react';
 import ListGroup from 'react-bootstrap/ListGroup'
 
 function TodoList(props) {
-
     return (
 
       <ListGroup variant="flush">

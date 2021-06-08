@@ -9,6 +9,7 @@ import axios from 'axios';
 
 
 import './todo.scss';
+import { NavItem } from 'react-bootstrap';
 
 function ToDo(props) {
 
@@ -16,11 +17,15 @@ function ToDo(props) {
 
   const [{ data, loading, error }, refetch] = useAxios ({url: "https:api-js401.herokuapp.com/api/v1/todo", method:"GET"});
 
-  const addItem = (item) => {
+  const addItem =  async item => {
     console.log(item);
-    item._id = Math.random();
     item.complete = false;
-    setList([...list, item]);
+    let url =  "https://api-js401.herokuapp.com/api/v1/todo/";
+    console.log('newitem', item);
+    await axios.post(url, item); 
+    let newlist = list.map(listItem => listItem._id === item._id ? item : listItem);
+    setList(newlist);
+    refetch();
   };
 
   const toggleComplete = async id => {
