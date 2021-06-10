@@ -1,9 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
-// import useGetAll from '../../hooks/get.js';
-// import { useGetData } from 'use-axios-react';
-// import { useGetCallback } from 'use-axios-react';
 import useAxios from 'axios-hooks';
 import axios from 'axios';
 
@@ -13,15 +10,17 @@ import './todo.scss';
 
 function ToDo(props) {
 
+
+
   const [list, setList] = useState([]);
 
   const [{ data, loading, error }, refetch] = useAxios ({url: "https:api-js401.herokuapp.com/api/v1/todo", method:"GET"});
 
   const addItem =  async item => {
-    console.log(item);
+    // console.log(item);
     item.complete = false;
     let url =  "https://api-js401.herokuapp.com/api/v1/todo/";
-    console.log('newitem', item);
+    // console.log('newitem', item);
     await axios.post(url, item); 
     let newlist = list.map(listItem => listItem._id === item._id ? item : listItem);
     setList(newlist);
