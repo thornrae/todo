@@ -3,16 +3,16 @@ import TodoForm from './form.js';
 import TodoList from './list.js';
 import useAxios from 'axios-hooks';
 import axios from 'axios';
-
+import Pagination from '../pagination.js';
 
 import './todo.scss';
 // import { NavItem } from 'react-bootstrap';
 
 function ToDo(props) {
-
-
-
   const [list, setList] = useState([]);
+  const [loadingP, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(3)
 
   const [{ data, loading, error }, refetch] = useAxios ({url: "https:api-js401.herokuapp.com/api/v1/todo", method:"GET"});
 
@@ -57,9 +57,15 @@ function ToDo(props) {
 
   useEffect( () => {
     if(!loading){
+      setLoading(true);
       setList(data.results);
+      setLoading(false);
     }
   }, [loading, data]);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = list.slice(indexOfFirstPost, indexOfLastPost)
 
     return (
       <>
@@ -77,10 +83,15 @@ function ToDo(props) {
 
           <div>
             <TodoList
-              list={list}
+              list={currentPosts}
               handleComplete={toggleComplete}
               handleDelete={deleteItem}
+              loading={loadingP}
             />
+          </div>
+
+          <div>
+            <Pagination postsPerPage={postsPerPage} totalPosts={list.length}/>
           </div>
         </section>
       </>
