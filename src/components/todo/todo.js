@@ -4,6 +4,7 @@ import TodoList from './list.js';
 import useAxios from 'axios-hooks';
 import axios from 'axios';
 import Pagination from '../pagination.js';
+import Auth from '../../auth/auth.js';
 
 import './todo.scss';
 // import { NavItem } from 'react-bootstrap';
@@ -69,18 +70,23 @@ function ToDo(props) {
 
     return (
       <>
+      <Auth>
         <header>
           <h2>
           There are {list.filter(item => !item.complete).length} Items To Complete
           </h2>
         </header>
+        </Auth>  
 
         <section className="todo">
 
+        <Auth capability="create">
           <div>
             <TodoForm todoHandleSubmit={addItem} />
           </div>
+        </Auth>  
 
+        <Auth capability="read">
           <div>
             <TodoList
               list={currentPosts}
@@ -89,10 +95,12 @@ function ToDo(props) {
               loading={loadingP}
             />
           </div>
-
           <div>
             <Pagination postsPerPage={postsPerPage} totalPosts={list.length}/>
           </div>
+        </Auth>
+  
+          
         </section>
       </>
     );
